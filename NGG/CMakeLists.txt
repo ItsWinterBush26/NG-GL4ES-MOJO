@@ -118,32 +118,6 @@ find_library(GLSLANG_LIB glslang PATHS ${CMAKE_SOURCE_DIR}/libraries/arm64-v8a/)
 
 add_library(ng_gl4es SHARED ${SRC_FILES})
 
-if(MACOS)
-    # iOS
-    set(iOS_LIB_DIR ${CMAKE_SOURCE_DIR}/library/ios)
-    target_link_libraries(${CMAKE_PROJECT_NAME}
-        ${iOS_LIB_DIR}/libglslang.a
-        ${iOS_LIB_DIR}/libspirv-cross-c-shared.dylib
-        ${iOS_LIB_DIR}/libGenericCodeGen.a
-        ${iOS_LIB_DIR}/libglslang-default-resource-limits.a
-        ${iOS_LIB_DIR}/libMachineIndependent.a
-        ${iOS_LIB_DIR}/libOSDependent.a
-        ${iOS_LIB_DIR}/libSPIRV-Tools-diff.a
-        ${iOS_LIB_DIR}/libSPIRV-Tools-link.aBuffer
-        ${iOS_LIB_DIR}/libSPIRV-Tools-lint.a
-        ${iOS_LIB_DIR}/libSPIRV-Tools-opt.a
-        ${iOS_LIB_DIR}/libSPIRV-Tools-reduce.a
-        ${iOS_LIB_DIR}/libSPIRV-Tools.a
-        ${iOS_LIB_DIR}/libSPIRV.a
-        ${iOS_LIB_DIR}/libSPVRemapper.a
-        "-F${CMAKE_SOURCE_DIR}/external"
-        "-framework libEGL"
-        "-framework libGLESv2"
-        "-framework Metal"
-        "-framework Foundation"
-        "-framework QuartzCore"
-    )
-else()
 if(ANDROID)
     # Android
     find_library(GLSLANG_LIB glslang PATHS ${CMAKE_SOURCE_DIR}/library/android/${ANDROID_ABI}/)
@@ -165,27 +139,6 @@ if(ANDROID)
         android
         log
     )
-else()
-    # Linux
-    # TODO: support more architectures.
-    find_library(GLSLANG_LIB glslang PATHS ${CMAKE_SOURCE_DIR}/library/linux/x86_64)
-    target_link_libraries(${CMAKE_PROJECT_NAME}
-        ${CMAKE_SOURCE_DIR}/library/linux/x86_64/libglslang.a
-        ${CMAKE_SOURCE_DIR}/library/linux/x86_64/libspirv-cross-c-shared.so
-        ${CMAKE_SOURCE_DIR}/library/linux/x86_64/libGenericCodeGen.a
-        ${CMAKE_SOURCE_DIR}/library/linux/x86_64/libglslang-default-resource-limits.a
-        ${CMAKE_SOURCE_DIR}/library/linux/x86_64/libMachineIndependent.a
-        ${CMAKE_SOURCE_DIR}/library/linux/x86_64/libOSDependent.a
-        ${CMAKE_SOURCE_DIR}/library/linux/x86_64/libSPIRV-Tools-diff.a
-        ${CMAKE_SOURCE_DIR}/library/linux/x86_64/libSPIRV-Tools-link.a
-        ${CMAKE_SOURCE_DIR}/library/linux/x86_64/libSPIRV-Tools-lint.a
-        ${CMAKE_SOURCE_DIR}/library/linux/x86_64/libSPIRV-Tools-opt.a
-        ${CMAKE_SOURCE_DIR}/library/linux/x86_64/libSPIRV-Tools-reduce.a
-        ${CMAKE_SOURCE_DIR}/library/linux/x86_64/libSPIRV-Tools.a
-        ${CMAKE_SOURCE_DIR}/library/linux/x86_64/libSPIRV.a
-        ${CMAKE_SOURCE_DIR}/library/linux/x86_64/libSPVRemapper.a
-    )
-endif()
 endif()
 
 target_include_directories(ng_gl4es PUBLIC
