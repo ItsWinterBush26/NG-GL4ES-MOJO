@@ -15,8 +15,7 @@ jobs:
     - name: Patch NGG
       run: |
         cd NGG
-        rm NG-GL4ES/CMakeLists.txt
-        mv CMakeLists.txt NG-GL4ES/
+        mv *.mk NG-GL4ES/
       
       
     - name: set up JDK 11
