@@ -2,10 +2,8 @@ LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
 
-LOCAL_MODULE := ng_gl4es
-LOCAL_DESCRIPTION := Krypton Wrapper 0.4.1
+LOCAL_MODULE    := NG-GL4ES
 
-# Source files - fixed line continuation issues
 LOCAL_SRC_FILES := \
     src/gl/string_utils.c \
     src/gl/cJSON.c \
@@ -81,41 +79,44 @@ LOCAL_SRC_FILES := \
     src/glx/gbm.c \
     src/glx/streaming.c \
     src/gl/vgpu/shaderconv.c \
-    src/gl/samplers.c
+    src/gl/samplers.c \
+    src/gl/glsl/glsl_for_es.cpp \
+    src/gl/getter.cpp
 
-# Include paths
-LOCAL_C_INCLUDES := \
-    $(LOCAL_PATH)/include \
-    $(LOCAL_PATH)/src
+LOCAL_CFLAGS    := -fPIC -DNO_GBM -DDEFAULT_ES=3 -fvisibility=hidden
+LOCAL_CPPFLAGS  := -fvisibility=hidden
+LOCAL_C_INCLUDES := $(LOCAL_PATH)/include
 
-# Compiler flags with LTO
-LOCAL_CFLAGS := \
-    -DANDROID \
-    -DNOX11 \
-    -DNO_GBM \
-    -DNO_EGL \
-    -DUSE_ES2 \
-    -DNO_INIT_CONSTRUCTOR \
-    -DNO_STATIC_EXTERN \
-    -DHAVE_LIBDL=1 \
-    -fvisibility=hidden \
-    -ffunction-sections \
-    -fdata-sections \
-    -flto
+LOCAL_LDLIBS := -llog -landroid
 
-# C++ specific flags for the .cpp file
-LOCAL_CPPFLAGS := $(LOCAL_CFLAGS)
-LOCAL_CPP_EXTENSION := .cpp
+LOCAL_STATIC_LIBRARIES := \
+    glslang \
+    GenericCodeGen \
+    glslang-default-resource-limits \
+    MachineIndependent \
+    OSDependent \
+    SPIRV-Tools-diff \
+    SPIRV-Tools-link \
+    SPIRV-Tools-lint \
+    SPIRV-Tools-opt \
+    SPIRV-Tools-reduce \
+    SPIRV-Tools \
+    SPIRV \
+    SPVRemapper
 
-# Linker flags with LTO
-LOCAL_LDFLAGS := -Wl,--gc-sections -flto
+LOCAL_SHARED_LIBRARIES := spirv-cross-c-shared
 
-# Shared libraries
-LOCAL_SHARED_LIBRARIES := \
-    libdl \
-    liblog \
-    libEGL \
-    libGLESv2
-
-# Build as shared library
 include $(BUILD_SHARED_LIBRARY)
+
+# Prebuilt static libraries
+$(foreach lib,glslang GenericCodeGen glslang-default-resource-limits MachineIndependent OSDependent SPIRV-Tools-diff SPIRV-Tools-link SPIRV-Tools-lint SPIRV-Tools-opt SPIRV-Tools-reduce SPIRV-Tools SPIRV SPVRemapper, \
+    $(eval include $(CLEAR_VARS) \
+    LOCAL_MODULE := $(lib) \
+    LOCAL_SRC_FILES := library/android/$(TARGET_ARCH_ABI)/lib$(lib).a \
+    include $(PREBUILT_STATIC_LIBRARY)) \
+)
+
+# Prebuilt shared library
+include $(CLEAR_VARS)
+LOCAL_MODULE := spirv-cross-c-shared
+LOCAL_SRC_FILES := library/android/$(TARGET_ARCH_ABI)/libspirv-cross-
