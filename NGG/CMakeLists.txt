@@ -16,9 +16,13 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Oz -flto -fPIC -DNO_GBM -DDEFAULT_ES=3 -fvisibility=hidden")
 
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_STRIP} $<TARGET_FILE:${PROJECT_NAME}>
+        COMMENT "Stripping symbols from ${PROJECT_NAME}"
+    )
+    
 if(ANDROID)
         set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Oz -flto -DNOX11")
-        
 endif()
 
 include_directories(${CMAKE_SOURCE_DIR}/include )
