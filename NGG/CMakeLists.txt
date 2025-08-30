@@ -16,11 +16,6 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Oz -flto -fPIC -DNO_GBM -DDEFAULT_ES=3 -fvisibility=hidden")
 
-add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-        COMMAND ${CMAKE_STRIP} $<TARGET_FILE:${PROJECT_NAME}>
-        COMMENT "Stripping symbols from ${PROJECT_NAME}"
-    )
-    
 if(ANDROID)
         set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Oz -flto -DNOX11")
 endif()
@@ -193,3 +188,8 @@ endif()
 target_include_directories(ng_gl4es PUBLIC
         ${CMAKE_SOURCE_DIR}/include
         )
+add_custom_command(TARGET ng_gl4es POST_BUILD
+        COMMAND ${CMAKE_STRIP} $<TARGET_FILE:ng_gl4es>
+        COMMENT "Stripping symbols from ng_gl4es}"
+    )
+    
