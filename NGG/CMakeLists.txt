@@ -12,6 +12,9 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 set(COMMON_FLAGS "-Os -flto -fvisibility=hidden -fPIC")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${COMMON_FLAGS} -DNO_GBM -DDEFAULT_ES=3")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${COMMON_FLAGS}")
+set(CMAKE_INTERPROCEDURAL_OPTIMIZATION TRUE)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -s") # For stripping all symbols
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g0") # For removing debug info
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
@@ -21,6 +24,9 @@ if(ANDROID)
     set(LINKER_FLAGS "-s -Wl,--gc-sections")
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${LINKER_FLAGS} -flto")
     set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${LINKER_FLAGS}")
+    set(CMAKE_INTERPROCEDURAL_OPTIMIZATION TRUE)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -s") # For stripping all symbols
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g0") # For removing debug info
 endif()
 
 include_directories(${CMAKE_SOURCE_DIR}/include )
