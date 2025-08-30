@@ -6,6 +6,12 @@ android {
     namespace = "com.bzlzhh.ng_gl4es"
     compileSdk = 34
 
+    packagingOptions {
+        jniLibs {
+            useLegacyPackaging = true
+        }
+    }
+
     defaultConfig {
         minSdk = 21
 
