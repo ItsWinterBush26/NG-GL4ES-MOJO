@@ -183,7 +183,6 @@ else()
         ${CMAKE_SOURCE_DIR}/library/linux/x86_64/libSPVRemapper.a
     )
 endif()
-endif()
 
 target_include_directories(ng_gl4es PUBLIC
         ${CMAKE_SOURCE_DIR}/include
